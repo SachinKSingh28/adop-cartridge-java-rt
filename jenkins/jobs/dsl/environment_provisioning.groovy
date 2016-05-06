@@ -10,6 +10,7 @@ def environmentProvisioningPipelineView = buildPipelineView(projectFolderName + 
 def createEnvironmentJob = freeStyleJob(projectFolderName + "/Create_Environment")
 def destroyEnvironmentJob = freeStyleJob(projectFolderName + "/Destroy_Environment")
 def listEnvironmentJob = freeStyleJob(projectFolderName + "/List_Environment")
+def extendJenkins = freeStyleJob(projectFolderName + "/Install_Plugins")
 
 // Create Environment
 createEnvironmentJob.with{
@@ -182,5 +183,49 @@ listEnvironmentJob.with{
                 |echo "=.=.=.=.=.=.=.=.=.=.=.=."
                 |echo "=.=.=.=.=.=.=.=.=.=.=.=."
                 |set -x'''.stripMargin())
+    }
+}
+
+// Load Plugins
+extendJenkins.with{
+    description("This job installs required plugins for this cartridge.")
+    label("docker")
+    environmentVariables {
+        env('WORKSPACE_NAME',workspaceFolderName)
+        env('PROJECT_NAME',projectFolderName)
+    }
+    wrappers {
+        preBuildCleanup()
+        injectPasswords()
+        maskPasswords()
+        sshAgent("adop-jenkins-master")
+    }
+    steps {
+        systemGroovyCommand('''
+    			|import jenkins.model.*
+    			|def pluginParameter="join"
+    			|def plugins = pluginParameter.split()
+    			|println(plugins)
+    			|def instance = Jenkins.getInstance()
+    			|def pm = instance.getPluginManager()
+    			|def uc = instance.getUpdateCenter()
+    			|def installed = false
+    			|
+    			|plugins.each {
+    			| if (!pm.getPlugin(it)) {
+    			|	def plugin = uc.getPlugin(it)
+    			|	if (plugin) {
+    			|	  println("Installing " + it)
+    			|	  plugin.deploy()
+    			|	  installed = true
+    			|	}
+    			|  }
+    			|}
+    			|
+    			|instance.save()
+    			|if (installed) {
+    			|  instance.doSafeRestart()
+    			|}
+    			|'''.stripMargin())
     }
 }
