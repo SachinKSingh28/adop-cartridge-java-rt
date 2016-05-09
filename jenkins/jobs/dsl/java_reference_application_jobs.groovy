@@ -1135,6 +1135,7 @@ performanceTestJob.with {
         env('WORKSPACE_NAME', workspaceFolderName)
         env('PROJECT_NAME', projectFolderName)
         env('JMETER_TESTDIR', 'jmeter-test')
+        env('ENVIRONMENT_NAME', 'PT')
     }
     label("docker")
     steps {
