@@ -32,7 +32,7 @@ def pipelineView = buildPipelineView(projectFolderName + "/Java_Reference_Applic
 
 pipelineView.with {
     title('Reference Application Pipeline')
-    displayedBuilds(5)
+    displayedBuilds(2)
     selectedJob(projectFolderName + "/Reference_Application_Build")
     showPipelineParameters()
     showPipelineDefinitionHeader()
@@ -41,6 +41,9 @@ pipelineView.with {
 
 buildAppJob.with {
     description("This job builds Java Spring reference application")
+    logRotator{
+        numToKeep(3)
+    }
     wrappers {
         preBuildCleanup()
         injectPasswords()
@@ -98,6 +101,9 @@ unitTestJob.with {
         stringParam("B", '', "Parent build number")
         stringParam("PARENT_BUILD", "Reference_Application_Build", "Parent build name")
     }
+    logRotator{
+        numToKeep(3)
+    }
     wrappers {
         preBuildCleanup()
         injectPasswords()
@@ -139,6 +145,9 @@ codeAnalysisJob.with {
     parameters {
         stringParam("B", '', "Parent build number")
         stringParam("PARENT_BUILD", "Reference_Application_Build", "Parent build name")
+    }
+    logRotator{
+        numToKeep(3)
     }
     environmentVariables {
         env('WORKSPACE_NAME', workspaceFolderName)
@@ -193,6 +202,9 @@ buildDockerImage.with {
         stringParam("B", '', "Parent build number")
         stringParam("PARENT_BUILD", "Reference_Application_Build", "Parent build name")
     }
+    logRotator{
+        numToKeep(3)
+    }
     wrappers {
         preBuildCleanup()
         injectPasswords()
@@ -241,6 +253,9 @@ regressionTestBatch1Job.with {
     parameters {
         stringParam("B", '', "Parent build number")
         stringParam("PARENT_BUILD", "Reference_Application_Build", "Parent build name")
+    }
+    logRotator{
+        numToKeep(3)
     }
     scm {
         git {
@@ -363,6 +378,9 @@ regressionTestBatch2Job.with {
         stringParam("B", '', "Parent build number")
         stringParam("PARENT_BUILD", "Reference_Application_Build", "Parent build name")
     }
+    logRotator{
+        numToKeep(3)
+    }
     scm {
         git {
             remote {
@@ -483,6 +501,9 @@ regressionTestBatch3Job.with {
     parameters {
         stringParam("B", '', "Parent build number")
         stringParam("PARENT_BUILD", "Reference_Application_Build", "Parent build name")
+    }
+    logRotator{
+        numToKeep(3)
     }
     scm {
         git {
@@ -605,6 +626,9 @@ regressionTestBatch4Job.with {
         stringParam("B", '', "Parent build number")
         stringParam("PARENT_BUILD", "Reference_Application_Build", "Parent build name")
     }
+    logRotator{
+        numToKeep(3)
+    }
     scm {
         git {
             remote {
@@ -725,6 +749,9 @@ regressionTestBatch5Job.with {
     parameters {
         stringParam("B", '', "Parent build number")
         stringParam("PARENT_BUILD", "Reference_Application_Build", "Parent build name")
+    }
+    logRotator{
+        numToKeep(3)
     }
     scm {
         git {
@@ -847,6 +874,9 @@ functionalTestJob.with {
         stringParam("B", '', "Parent build number")
         stringParam("PARENT_BUILD", "Reference_Application_Build", "Parent build name")
     }
+    logRotator{
+        numToKeep(3)
+    }
     scm {
         git {
             remote {
@@ -967,6 +997,9 @@ securityTestJob.with {
     parameters {
         stringParam("B", '', "Parent build number")
         stringParam("PARENT_BUILD", "Reference_Application_Build", "Parent build name")
+    }
+    logRotator{
+        numToKeep(3)
     }
     scm {
         git {
@@ -1089,6 +1122,9 @@ performanceTestJob.with {
         stringParam("B", '', "Parent build number")
         stringParam("PARENT_BUILD", "Reference_Application_Regression_Tests", "Parent build name")
     }
+    logRotator{
+        numToKeep(3)
+    }
     wrappers {
         preBuildCleanup()
         injectPasswords()
@@ -1193,6 +1229,9 @@ deployToDemoJob.with {
         stringParam("PARENT_BUILD", "Reference_Application_Build", "Parent build name")
         stringParam("ENVIRONMENT_NAME", "CI", "Name of the environment.")
     }
+    logRotator{
+        numToKeep(3)
+    }
     wrappers {
         preBuildCleanup()
         injectPasswords()
@@ -1255,6 +1294,9 @@ rapidTestsMultiJob.with {
         stringParam("PARENT_BUILD", "Reference_Application_Build", "Parent build name")
         stringParam("ENVIRONMENT_NAME", "CI", "Name of the environment.")
     }
+    logRotator{
+        numToKeep(3)
+    }
     wrappers {
         preBuildCleanup()
         injectPasswords()
@@ -1289,6 +1331,9 @@ deployJobToProdA.with {
         stringParam("B", '', "Parent build number")
         stringParam("PARENT_BUILD", "Reference_Application_Build", "Parent build name")
         stringParam("ENVIRONMENT_NAME", "PRODA", "Name of the environment.")
+    }
+    logRotator{
+        numToKeep(3)
     }
     wrappers {
         preBuildCleanup()
@@ -1347,6 +1392,9 @@ deployJobToProdB.with {
         stringParam("B", '', "Parent build number")
         stringParam("PARENT_BUILD", "Reference_Application_Build", "Parent build name")
         stringParam("ENVIRONMENT_NAME", "PRODB", "Name of the environment.")
+    }
+    logRotator{
+        numToKeep(3)
     }
     wrappers {
         preBuildCleanup()
