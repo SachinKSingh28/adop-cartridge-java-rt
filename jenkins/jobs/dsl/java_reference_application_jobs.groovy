@@ -176,7 +176,7 @@ sonar.scm.enabled=false''')
     }
     publishers {
         downstreamParameterized {
-            trigger(projectFolderName + "/Reference_Application_Deploy") {
+            trigger(projectFolderName + "/Reference_Application_Build_Docker_Image") {
                 condition("UNSTABLE_OR_BETTER")
                 parameters {
                     predefinedProp("B", '${B}')
@@ -711,16 +711,6 @@ regressionTestBatch4Job.with {
         }
     }
     publishers {
-        downstreamParameterized {
-            trigger(projectFolderName + "/Reference_Application_Performance_Tests") {
-                condition("UNSTABLE_OR_BETTER")
-                parameters {
-                    predefinedProp("B", '${B}')
-                    predefinedProp("PARENT_BUILD", '${PARENT_BUILD}')
-                    predefinedProp("ENVIRONMENT_NAME", '${ENVIRONMENT_NAME}')
-                }
-            }
-        }
         publishHtml {
             report('$WORKSPACE') {
                 reportName('ZAP security test report')
@@ -1098,7 +1088,6 @@ performanceTestJob.with {
     parameters {
         stringParam("B", '', "Parent build number")
         stringParam("PARENT_BUILD", "Reference_Application_Regression_Tests", "Parent build name")
-        stringParam("ENVIRONMENT_NAME", "CI", "Name of the environment.")
     }
     wrappers {
         preBuildCleanup()
@@ -1165,7 +1154,7 @@ performanceTestJob.with {
             antInstallation('ADOP Ant')
         }
         shell('''mv $JMETER_TESTDIR/src/test/gatling/* .
-            |export SERVICE_NAME="$(echo ${PROJECT_NAME} | tr '/' '_')_${ENVIRONMENT_NAME}"
+            |export SERVICE_NAME="ExampleWorkspace_Performance_Tests"
             |CONTAINER_IP=$(docker inspect --format '{{ .NetworkSettings.Networks.'"$DOCKER_NETWORK_NAME"'.IPAddress }}' ${SERVICE_NAME})
             |sed -i "s/###TOKEN_VALID_URL###/http:\\/\\/${CONTAINER_IP}:8080/g" ${WORKSPACE}/src/test/scala/default/RecordedSimulation.scala
             |sed -i "s/###TOKEN_RESPONSE_TIME###/10000/g" ${WORKSPACE}/src/test/scala/default/RecordedSimulation.scala
