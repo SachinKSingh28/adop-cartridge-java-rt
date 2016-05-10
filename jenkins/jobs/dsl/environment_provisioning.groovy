@@ -189,7 +189,6 @@ listEnvironmentJob.with{
 // Load Plugins
 extendJenkins.with{
     description("This job installs required plugins for this cartridge.")
-    label("docker")
     environmentVariables {
         env('WORKSPACE_NAME',workspaceFolderName)
         env('PROJECT_NAME',projectFolderName)
@@ -203,7 +202,7 @@ extendJenkins.with{
     steps {
         systemGroovyCommand('''
     			|import jenkins.model.*
-    			|def pluginParameter="join"
+    			|def pluginParameter="jenkins-multijob-plugin"
     			|def plugins = pluginParameter.split()
     			|println(plugins)
     			|def instance = Jenkins.getInstance()
@@ -229,3 +228,4 @@ extendJenkins.with{
     			|'''.stripMargin())
     }
 }
+queue(extendJenkins)

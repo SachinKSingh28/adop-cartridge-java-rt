@@ -241,7 +241,6 @@ buildDockerImage.with {
                 parameters {
                     predefinedProp("B", '${B}')
                     predefinedProp("PARENT_BUILD", '${PARENT_BUILD}')
-                    predefinedProp("ENVIRONMENT_NAME", '${ENVIRONMENT_NAME}')
                 }
             }
         }
@@ -1135,7 +1134,6 @@ performanceTestJob.with {
         env('WORKSPACE_NAME', workspaceFolderName)
         env('PROJECT_NAME', projectFolderName)
         env('JMETER_TESTDIR', 'jmeter-test')
-        env('ENVIRONMENT_NAME', 'PT')
     }
     label("docker")
     steps {
@@ -1293,7 +1291,6 @@ rapidTestsMultiJob.with {
     parameters {
         stringParam("B", '', "Parent build number")
         stringParam("PARENT_BUILD", "Reference_Application_Build", "Parent build name")
-        stringParam("ENVIRONMENT_NAME", "CI", "Name of the environment.")
     }
     logRotator{
         numToKeep(3)
@@ -1308,7 +1305,6 @@ rapidTestsMultiJob.with {
         env('WORKSPACE_NAME', workspaceFolderName)
         env('PROJECT_NAME', projectFolderName)
     }
-    label("docker")
     steps {
         phase('Run_Test_Batches') {
             phaseJob(projectFolderName + "/Reference_Application_Regression_Tests_Batch1")
